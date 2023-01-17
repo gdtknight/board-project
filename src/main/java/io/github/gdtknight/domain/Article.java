@@ -1,14 +1,19 @@
 package io.github.gdtknight.domain;
 
 import java.time.LocalDateTime;
+import java.util.LinkedHashSet;
 import java.util.Objects;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Index;
+import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
 import org.springframework.data.annotation.CreatedBy;
@@ -49,6 +54,11 @@ public class Article {
 
   @Setter
   private String hashtag; // 해시태그
+
+  @ToString.Exclude // 순환 참조 문제 발생 가능성 제거
+  @OrderBy("id")
+  @OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
+  private final Set<ArticleComment> articleComments = new LinkedHashSet<>();
 
   // meta-information
   @CreatedDate
