@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -30,6 +31,7 @@ import lombok.ToString;
     @Index(columnList = "createdAt"),
     @Index(columnList = "createdBy")
 })
+@Entity
 public class ArticleComment {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
