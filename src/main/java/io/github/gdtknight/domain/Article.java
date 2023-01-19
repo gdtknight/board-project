@@ -1,6 +1,5 @@
 package io.github.gdtknight.domain;
 
-import java.time.LocalDateTime;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -17,10 +16,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
-import org.springframework.data.annotation.CreatedBy;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedBy;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import lombok.AccessLevel;
@@ -40,7 +35,7 @@ import lombok.ToString;
 })
 @EntityListeners(AuditingEntityListener.class)
 @Entity
-public class Article {
+public class Article extends AuditingFields {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
@@ -62,18 +57,6 @@ public class Article {
   @OrderBy("id")
   @OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
   private final Set<ArticleComment> articleComments = new LinkedHashSet<>();
-
-  // meta-information
-  @CreatedDate
-  private LocalDateTime createdAt; // 생성일시
-  @CreatedBy
-  @Column(nullable = false, length = 100)
-  private String createdBy; // 생성자
-  @LastModifiedDate
-  private LocalDateTime modifiedAt; // 수정일시
-  @LastModifiedBy
-  @Column(nullable = false, length = 100)
-  private String modifiedBy; // 수정자
 
   private Article(String title, String content, String hashtag) {
     this.title = title;
