@@ -1,3 +1,9 @@
+buildscript {
+    ext {
+        queryDslVersion = "5.0.0"
+    }
+}
+
 plugins {
 	id 'java'
 	id 'org.springframework.boot' version '2.7.5'
@@ -35,12 +41,14 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
-  implementation "com.querydsl:querydsl-jpa"
-  implementation "com.querydsl:querydsl-core"
-  implementation "com.querydsl:querydsl-collections"
-  annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jpa"
-  annotationProcessor "jakarta.annotation:jakarta.annotation-api"
-  annotationProcessor "jakarta.persistence:jakarta.persistence-api"
+// queryDSL 설정
+	implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
+	implementation "com.querydsl:querydsl-core:${queryDslVersion}"
+	implementation "com.querydsl:querydsl-collections:${queryDslVersion}"
+	annotationProcessor "com.querydsl:querydsl-apt:${queryDslVersion}:jpa" // querydsl JPAAnnotationProcessor 사용 지정
+	annotationProcessor "jakarta.annotation:jakarta.annotation-api" // java.lang.NoClassDefFoundError (javax.annotation.Generated) 대응 코드
+	annotationProcessor "jakarta.persistence:jakarta.persistence-api" // java.lang.NoClassDefFoundError (javax.annotation.Entity) 대응 코드
+
 	// implementation 'org.springframework.boot:spring-boot-starter-security'
 	// implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
 	// testImplementation 'org.springframework.security:spring-security-test'
@@ -55,12 +63,21 @@ tasks.named('test') {
 
 // querydsl QClass 파일 생성 위치를 지정
 tasks.withType(JavaCompile) {
-  options.getGeneratedSourceOutputDirectory().set(file('src/main/generated'))
+  options.getGeneratedSourceOutputDirectory().set(file("$projectDir/src/main/generated"))
 }
 
 // java source set 에 querydsl QClass 위치 추가
 sourceSets {
-  main.java.srcDirs += [ 'src/main/generated']
+    main {
+        java {
+            srcDirs = [
+            "$projectDir/src/main/java",
+            // "$projectDir/build/generated-sources/annotations",
+            // "$projectDir/bin/generated-sources/annotations",
+            "$projectDir/src/main/generated"
+            ]
+        }
+    }
 }
 
 // gradle clean 시에 QClass 디렉토리 삭제
