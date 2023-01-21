@@ -10,11 +10,9 @@
 
 <body>
 
-  <header>
-    header
-
-    <hr>
-  </header>
+  <!-- replace & insert 두가지 중 하나 선택 가능 -->
+  <header th:replace="~{header :: header}">header</header>
+  <hr>
 
   <main>
     <form>
@@ -102,10 +100,9 @@
 
   </main>
 
-  <footer>
-    <hr>
-    footer
-  </footer>
+  <hr>
+
+  <footer th:replace="~{footer::footer}">header</footer>
 
 </body>
 
