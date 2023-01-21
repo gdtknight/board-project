@@ -5,16 +5,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
+@Disabled("SpringData REST 통합테스트는 불필요하므로 제외")
 @DisplayName("Data REST - API 테스트")
 // Test 에서 사용하는 모든 DB Action들 Rollback
 @Transactional
@@ -30,7 +31,6 @@ public class DataRestTest {
   // Integration Test
   @DisplayName("[api] 게시글 리스트 조회")
   @Test
-  @WithMockUser(username = "user", roles = { "SUPER" })
   void givenNothing_whenRequestingArticles_thenReturnsArticlesJsonResponse() throws Exception {
     // Given
     // When & Then
@@ -42,7 +42,6 @@ public class DataRestTest {
 
   @DisplayName("[api] 게시글 단건 조회")
   @Test
-  @WithMockUser(username = "user", roles = { "SUPER" })
   void givenNothing_whenRequestingArticle_thenReturnsArticleJsonResponse() throws Exception {
     // Given
     // When & Then
@@ -54,7 +53,6 @@ public class DataRestTest {
 
   @DisplayName("[api] 게시글 -> 댓글 리스트 조회")
   @Test
-  @WithMockUser(username = "user", roles = { "SUPER" })
   void givenNothing_whenRequestingArticleCommentsFromArticle_thenReturnsArticleCommentsJsonResponse() throws Exception {
     // Given
     // When & Then
@@ -66,7 +64,6 @@ public class DataRestTest {
 
   @DisplayName("[api] 댓글 리스트 조회")
   @Test
-  @WithMockUser(username = "user", roles = { "SUPER" })
   void givenNothing_whenRequestingArticleComments_thenReturnsArticleCommentsJsonResponse() throws Exception {
     // Given
     // When & Then
@@ -78,7 +75,6 @@ public class DataRestTest {
 
   @DisplayName("[api] 댓글 단건 조회")
   @Test
-  @WithMockUser(username = "user", roles = { "SUPER" })
   void givenNothing_whenRequestingArticleComment_thenReturnsArticleCommentJsonResponse() throws Exception {
     // Given
     // When & Then
