@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<thlogic>
+  <attr sel="header.articles-header" th:replace="component/header :: header.article-header" />
+  <attr sel="footer.articles-footer" th:replace="component/footer :: footer.article-footer" />
+</thlogic>
+

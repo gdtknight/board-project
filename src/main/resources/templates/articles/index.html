@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Article Page</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- <link href="css/style.css" rel="stylesheet"> -->
+</head>
+
+<body>
+
+  <!-- replace & insert 두가지 중 하나 선택 가능 -->
+  <header></header>
+  <hr>
+
+  <main>
+    <form>
+      <!-- 필터: 제목, 본문, id, 닉네임, 해시태그 -->
+      <label for="search-type" hideen></label>
+      <select name="search-type" id="search-type">
+        <option>title</option>
+        <option>content</option>
+        <option>id</option>
+        <option>nickname</option>
+        <option>hashtag</option>
+      </select>
+      <label for="search-value" hidden></label>
+      <input type"search" placeholder="Search" name="search-value">
+      <button type="submit">search</button>
+    </form>
+
+
+    <table>
+
+      <thead>
+
+        <tr>
+          <th>title</th>
+          <th>hashtag</th>
+          <th>createdBy</th>
+          <th>createdAt</th>
+        </tr>
+
+      </thead>
+
+      <tbody>
+
+        <tr>
+          <th>First</th>
+          <th>#Java</th>
+          <th>Lee</th>
+          <th>2022-01-21</th>
+        </tr>
+
+        <tr>
+          <th>Second</th>
+          <th>#Spring</th>
+          <th>Shin</th>
+          <th>2022-01-21</th>
+        </tr>
+
+        <tr>
+          <th>Third</th>
+          <th>#Jpa</th>
+          <th>Kim</th>
+          <th>2022-01-21</th>
+        </tr>
+
+        <tr>
+          <th>Fourth</th>
+          <th>#Security</th>
+          <th>Park</th>
+          <th>2022-01-21</th>
+        </tr>
+
+      </tbody>
+
+      <tfoot>
+
+      </tfoot>
+
+    </table>
+
+    <nav>
+      <hr>
+      <table>
+        <tr>
+          <td>prev</td>
+          <td>1</td>
+          <td>2</td>
+          <td>3</td>
+          <td>4</td>
+          <td>5</td>
+          <td>next</td>
+        </tr>
+      </table>
+
+    </nav>
+
+  </main>
+
+  <hr>
+
+  <footer></footer>
+
+</body>
+
+</html>
