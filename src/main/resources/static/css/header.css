@@ -1,0 +1,9 @@
+.p-3 {
+  padding: 1rem !important;
+}
+
+.text-bg-dark {
+  color: rgb(255, 255, 255) !important;
+  background-color: RGBA(33, 37, 41, var(--bs-bg-opacity, 1)) !important;
+}
+

@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <thlogic>
-  <attr sel="header" th:replace="component/header :: header.article-header" />
-  <attr sel="footer" th:replace="component/footer :: footer.article-footer" />
+  <attr sel="header" th:replace="component/header :: header" />
+  <attr sel="footer" th:replace="component/footer :: footer" />
+  <attr sel="nav" th:replace="component/nav :: nav" />
 </thlogic>
