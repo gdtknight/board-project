@@ -5,86 +5,93 @@
   <title>Article Detail Page</title>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!-- <link href="css/style.css" rel="stylesheet"> -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+  <link href="/css/index.css" rel="stylesheet">
 </head>
 
 <body>
 
-  <header class="articles-header"></header>
-  <hr>
+  <header></header>
 
-  <main>
-    <header class="article-main-header">
-      <h1>First Article</h1>
-    </header>
-    <aside class="article-aside">
-      <p>CreatedBy</p>
-      <p><a href="mailto:createdBy@gmail.com">createdBy@gmail.com</p>
-      <p><time datetime="2023-01-22T00:00:00">2023-01-22</time></p>
-      <p>#Java</p>
-    </aside>
+  <main class="container py-4 px-5">
+    <div class="row">
+      <h1 class="offset-md-1 col-sm-3">First Article</h1>
+    </div>
 
-    <section class="article-section">
+    <div class="row justify-content-around px-2">
+      <div class="col-7">
+        <section class="article-section">
+          <p>
+            content
+          </p>
+        </section>
+      </div>
+      <div class="col-2">
+        <section class="article-section">
+          <aside class="article-aside">
+            <p>CreatedBy</p>
+            <p><a href="mailto:createdBy@gmail.com">createdBy@gmail.com</p>
+            <p><time datetime="2023-01-22T00:00:00">2023-01-22</time></p>
+            <p>#Java</p>
+          </aside>
+        </section>
+      </div>
+    </div>
 
-    </section>
-    <div>
+    <div class="row g-6 py-3 px-5">
       <form>
-        <label for="article-comment" hidden>Comment</label>
-        <textarea id="article-comment" placeholder="Write comment" rows="3"></textarea>
-        <button type="submit">Write</button>
+        <div class="input-group">
+          <label for="article-comment" hidden>Comment</label>
+          <textarea class="form-control" placeholder="Write comment" aria-label="With textarea"></textarea>
+          <span class="input-group-text">Write</span>
+        </div>
       </form>
+    </div>
 
-      <ul>
-        <li>
+    <div class="row g-5">
+      <ul class="list-group mb-3 px-5 py-1">
+        <li class="list-group-item d-flex justify-content-between lh-sm">
           <div>
-            <time><small>2022-01-22</small></time>
-            <strong>CreatedByOne</strong>
-            <p>
-              Comments One
-            </p>
+            <h6 class="my-0">
+              <p>Comments One</p>
+            </h6>
+            <small class="text-muted"><strong>CreatedByOne</strong></small>
           </div>
+          <span class="text-muted">
+            <p><time datetime="2023-01-22T00:00:00">2023-01-22</time></p>
+          </span>
         </li>
-
-        <li>
+        <li class="list-group-item d-flex justify-content-between lh-sm">
           <div>
-            <time><small>2022-01-22</small></time>
-            <strong>CreatedByTwo</strong>
-            <p>
-              Comments Two
-            </p>
+            <h6 class="my-0">
+              <p>Comments Two</p>
+            </h6>
+            <small class="text-muted"><strong>CreatedByTwo</strong></small>
           </div>
+          <span class="text-muted">
+            <p><time datetime="2023-01-22T00:00:00">2023-01-22</time></p>
+          </span>
         </li>
-
-        <li>
+        <li class="list-group-item d-flex justify-content-between lh-sm">
           <div>
-            <time><small>2022-01-22</small></time>
-            <strong>CreatedByThree</strong>
-            <p>
-              Comments Three
-            </p>
+            <h6 class="my-0">
+              <p>Comments Tree</p>
+            </h6>
+            <small class="text-muted"><strong>CreatedByThree</strong></small>
           </div>
+          <span class="text-muted">
+            <p><time datetime="2023-01-22T00:00:00">2023-01-22</time></p>
+          </span>
         </li>
       </ul>
     </div>
 
-    <nav>
-      <hr>
-      <table>
-        <tr>
-          <td><a href="#">prev</a></td>
-          <td><a href="#">1</a></td>
-          <td><a href="#">2</a></td>
-          <td><a href="#">3</a></td>
-          <td><a href="#">next</a></td>
-        </tr>
-      </table>
-    </nav>
+    <nav></nav>
 
   </main>
 
-  <hr>
-
-  <footer class="articles-footer"></footer>
+  <footer></footer>
 
 </body>
 
