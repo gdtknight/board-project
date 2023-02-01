@@ -23,7 +23,7 @@ public record UserAccountDto(
       LocalDateTime createdAt, String createdBy,
       LocalDateTime modifiedAt, String modifiedBy) {
 
-    return UserAccountDto.of(
+    return new UserAccountDto(
         id,
         userId, userPassword,
         email, nickname, memo,
