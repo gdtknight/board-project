@@ -28,12 +28,15 @@ public class ArticleCommentService {
     return null;
   }
 
-  public void saveArticleComment(ArticleCommentDto of) {
+  public void saveArticleComment(ArticleCommentDto dto) {
   }
 
-  public void updateArticleComment(long articleCommentId, ArticleCommentUpdateDto of) {
+  public void updateArticleComment(ArticleCommentUpdateDto dto) {
   }
 
   public void deleteArticleComment(long l) {
+  }
+
+  public void updateArticleComment(ArticleCommentDto dto) {
   }
 }
