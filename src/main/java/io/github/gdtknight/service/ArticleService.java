@@ -53,7 +53,7 @@ public class ArticleService {
   public ArticleWithCommentsDto getArticle(Long articleId) {
     return articleRepository.findById(articleId)
         .map(ArticleWithCommentsDto::from)
-        .orElseThrow(() -> new EntityNotFoundException("게시글이 없습니다 - articleId: " + articleId));
+        .orElseThrow(() -> new EntityNotFoundException("게시글이 없습니다 - articleId: " + articleId)); // 운영 편의
   }
 
   public void saveArticle(ArticleDto dto) {
@@ -77,8 +77,7 @@ public class ArticleService {
 
       articleRepository.save(article);
     } catch (EntityNotFoundException e) {
-      log.warn("게시글 업데이트 실패. 게시글을 찾을 수 없습니다 - dto: {}", dto);
-
+      log.warn("게시글 업데이트 실패. 게시글을 찾을 수 없습니다 - dto: {}", dto); // String interpolation
     }
 
   }
