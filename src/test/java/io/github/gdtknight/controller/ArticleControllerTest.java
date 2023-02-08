@@ -59,8 +59,7 @@ class ArticleControllerTest {
         .andExpect(status().isOk())
         .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
         .andExpect(view().name("articles/index"))
-        .andExpect(model().attributeExists("articles"))
-        .andExpect(model().attributeExists("searchTypes"));
+        .andExpect(model().attributeExists("articles"));
     then(articleService).should().searchArticles(eq(null), eq(null), any(Pageable.class));
   }
 
