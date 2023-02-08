@@ -1,5 +1,7 @@
 package io.github.gdtknight.repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.querydsl.binding.QuerydslBinderCustomizer;
@@ -31,5 +33,7 @@ public interface ArticleCommentRepository extends
     bindings.bind(root.createdAt).first(DateTimeExpression::eq); // like '%S{value}%'
     bindings.bind(root.createdBy).first(StringExpression::containsIgnoreCase); // like '%S{value}%'
   }
+
+  List<ArticleComment> findByArticle_Id(Long articleId);
 
 }

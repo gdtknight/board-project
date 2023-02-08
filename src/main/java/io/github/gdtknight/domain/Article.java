@@ -12,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Index;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
@@ -26,7 +27,7 @@ import lombok.ToString;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@ToString
+@ToString(callSuper = true)
 @Table(indexes = {
     @Index(columnList = "title"),
     @Index(columnList = "hashtag"),
@@ -39,6 +40,10 @@ public class Article extends AuditingFields {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
+
+  @Setter
+  @ManyToOne(optional = false)
+  private UserAccount userAccount;
 
   // @Setter 를 Class 전체가 아닌 각 필드에 걸어준다
   // 외부 임의 접근 방지 의도
@@ -54,11 +59,12 @@ public class Article extends AuditingFields {
   private String hashtag; // 해시태그
 
   @ToString.Exclude // 순환 참조 문제 발생 가능성 제거
-  @OrderBy("id")
+  @OrderBy("createdAt DESC")
   @OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
   private final Set<ArticleComment> articleComments = new LinkedHashSet<>();
 
-  private Article(String title, String content, String hashtag) {
+  private Article(UserAccount userAccount, String title, String content, String hashtag) {
+    this.userAccount = userAccount;
     this.title = title;
     this.content = content;
     this.hashtag = hashtag;
@@ -66,8 +72,8 @@ public class Article extends AuditingFields {
 
   // 생성자들은 protected, private 으로 접근을 방지
   // static method 를 활용하여 생성된 객체를 반환
-  public static Article of(String title, String content, String hashtag) {
-    return new Article(title, content, hashtag);
+  public static Article of(UserAccount userAccount, String title, String content, String hashtag) {
+    return new Article(userAccount, title, content, hashtag);
   }
 
   // Equals, HashCode -> Lombok을 활용해서 생성하는 경우

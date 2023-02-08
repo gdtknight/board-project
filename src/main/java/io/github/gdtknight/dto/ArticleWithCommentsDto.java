@@ -1,12 +1,16 @@
 package io.github.gdtknight.dto;
 
 import java.time.LocalDateTime;
+import java.util.LinkedHashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import io.github.gdtknight.domain.Article;
 
-public record ArticleDto(
+public record ArticleWithCommentsDto(
     Long id,
     UserAccountDto userAccountDto,
+    Set<ArticleCommentDto> articleCommentDtos,
     String title,
     String content,
     String hashtag,
@@ -15,19 +19,30 @@ public record ArticleDto(
     LocalDateTime modifiedAt,
     String modifiedBy) {
 
-  public static ArticleDto of(
+  public static ArticleWithCommentsDto of(
       Long id,
       UserAccountDto userAccountDto,
+      Set<ArticleCommentDto> articleCommentDtos,
       String title, String content, String hashtag,
       LocalDateTime createdAt, String createdBy,
       LocalDateTime modifiedAt, String modifiedBy) {
-    return new ArticleDto(id, userAccountDto, title, content, hashtag, createdAt, createdBy, modifiedAt, modifiedBy);
+
+    return new ArticleWithCommentsDto(
+        id,
+        userAccountDto,
+        articleCommentDtos,
+        title, content, hashtag,
+        createdAt, createdBy,
+        modifiedAt, modifiedBy);
   }
 
-  public static ArticleDto fromEntity(Article entity) {
-    return new ArticleDto(
+  public static ArticleWithCommentsDto from(Article entity) {
+    return new ArticleWithCommentsDto(
         entity.getId(),
         UserAccountDto.fromEntity(entity.getUserAccount()),
+        entity.getArticleComments().stream()
+            .map(ArticleCommentDto::fromEntity)
+            .collect(Collectors.toCollection(LinkedHashSet::new)),
         entity.getTitle(),
         entity.getContent(),
         entity.getHashtag(),
@@ -37,11 +52,4 @@ public record ArticleDto(
         entity.getModifiedBy());
   }
 
-  public Article toEntity() {
-    return Article.of(
-        userAccountDto.toEntity(),
-        title,
-        content,
-        hashtag);
-  }
 }

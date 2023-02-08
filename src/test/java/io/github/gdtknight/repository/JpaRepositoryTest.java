@@ -13,6 +13,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 import io.github.gdtknight.config.JpaConfig;
 import io.github.gdtknight.domain.Article;
+import io.github.gdtknight.domain.UserAccount;
 
 /**
  * @ActiveProfiles @AutoConfigureTestDatabase 어노테이션을 통해
@@ -26,12 +27,15 @@ import io.github.gdtknight.domain.Article;
 public class JpaRepositoryTest {
   private final ArticleRepository articleRepository;
   private final ArticleCommentRepository articleCommentRepository;
+  private final UserAccountRepository userAccountRepository;
 
   public JpaRepositoryTest(
       @Autowired ArticleRepository articleRepository,
-      @Autowired ArticleCommentRepository articleCommentRepository) {
+      @Autowired ArticleCommentRepository articleCommentRepository,
+      @Autowired UserAccountRepository userAccountRepository) {
     this.articleRepository = articleRepository;
     this.articleCommentRepository = articleCommentRepository;
+    this.userAccountRepository = userAccountRepository;
   }
 
   @DisplayName("select 테스트")
@@ -53,10 +57,11 @@ public class JpaRepositoryTest {
   void givenTestData_whenInserting_thenWorksFine() {
     // given
     long previousCount = articleRepository.count();
+    UserAccount userAccount = userAccountRepository.save(UserAccount.of("uno", "pw", null, null, null));
+    Article article = Article.of(userAccount, "new article", "new content", "#spring");
 
     // when
-    Article savedArticle = articleRepository.save(
-        Article.of("new article", "new content", null));
+    articleRepository.save(article);
 
     // then
     assertThat(articleRepository.count()).isEqualTo(previousCount + 1);
