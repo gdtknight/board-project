@@ -1,5 +1,8 @@
 package io.github.gdtknight.controller;
 
+import java.util.List;
+
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -14,6 +17,7 @@ import io.github.gdtknight.domain.type.SearchType;
 import io.github.gdtknight.dto.ArticleResponse;
 import io.github.gdtknight.dto.ArticleWithCommentsResponse;
 import io.github.gdtknight.service.ArticleService;
+import io.github.gdtknight.service.PaginationService;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -22,6 +26,7 @@ import lombok.RequiredArgsConstructor;
 public class ArticleController {
 
   private final ArticleService articleService;
+  private final PaginationService paginationService;
 
   @GetMapping
   public String articles(
@@ -29,9 +34,16 @@ public class ArticleController {
       @RequestParam(required = false) String searchValue,
       @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable,
       ModelMap map) {
+    Page<ArticleResponse> articles = articleService
+        .searchArticles(searchType, searchValue, pageable)
+        .map(ArticleResponse::fromArticleDto);
 
-    map.addAttribute("articles",
-        articleService.searchArticles(searchType, searchValue, pageable).map(ArticleResponse::fromArticleDto));
+    List<Integer> barNumbers = paginationService
+        .getPaginationBarNumbers(
+            pageable.getPageNumber(),
+            articles.getTotalPages());
+    map.addAttribute("articles", articles);
+    map.addAttribute("paginationBarNumbers", barNumbers);
     return "articles/index";
 
   }
