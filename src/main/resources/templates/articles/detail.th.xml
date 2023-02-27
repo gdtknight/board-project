@@ -21,5 +21,18 @@
       <attr sel="div/p" th:text="${articleComment.content}" />
     </attr>
   </attr>
+
+  <!-- <attr sel="#pagination"> -->
+  <!--   <attr sel="li[0]/a" -->
+  <!--     th:text="'previous'" -->
+  <!--     th:href="@{/articles(page=${articles.number - 1})}" -->
+  <!--     th:class="'page-link' + (${articles.number} <= 0 ? ' disabled' : '')" -->
+  <!--     /> -->
+  <!--   <attr sel="li[1]/a" -->
+  <!--     th:text="'next'" -->
+  <!--     th:href="@{/articles(page=${articles.number + 1})}" -->
+  <!--     th:class="'page-link' + (${articles.number} >= ${articles.totalPages - 1} ? ' disabled' : '')" -->
+  <!--     /> -->
+  <!-- </attr> -->
 </thlogic>
 
