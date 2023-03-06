@@ -1,5 +1,7 @@
 package io.github.gdtknight.service;
 
+import java.util.List;
+
 import javax.persistence.EntityNotFoundException;
 
 import org.springframework.data.domain.Page;
@@ -84,6 +86,23 @@ public class ArticleService {
 
   public void deleteArticle(long articleId) {
     articleRepository.deleteById(articleId);
+  }
+
+  @Transactional(readOnly = true)
+  public Page<ArticleDto> searchArticlesViaHashtag(String hashtag, Pageable pageable) {
+    if (hashtag == null || hashtag.isBlank()) {
+      return Page.empty(pageable);
+    }
+
+    return articleRepository.findByHashtag(hashtag, pageable).map(ArticleDto::fromEntity);
+  }
+
+  public List<String> getHashtags() {
+    return articleRepository.findAllDistinctHashtags();
+  }
+
+  public Object getArticleCount() {
+    return null;
   }
 
 }

@@ -13,10 +13,12 @@ import com.querydsl.core.types.dsl.StringExpression;
 
 import io.github.gdtknight.domain.Article;
 import io.github.gdtknight.domain.QArticle;
+import io.github.gdtknight.repository.querydsl.ArticleRepositoryCustom;
 
 @RepositoryRestResource
 public interface ArticleRepository extends
     JpaRepository<Article, Long>,
+    ArticleRepositoryCustom,
     QuerydslPredicateExecutor<Article>, // 모든 필드에 대한 기본 검색 기능 구현
     QuerydslBinderCustomizer<QArticle> {
 
