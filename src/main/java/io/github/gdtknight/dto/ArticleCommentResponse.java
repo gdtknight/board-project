@@ -1,6 +1,5 @@
 package io.github.gdtknight.dto;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 
 public record ArticleCommentResponse(
@@ -8,7 +7,7 @@ public record ArticleCommentResponse(
     String content,
     LocalDateTime createdAt,
     String email,
-    String nickname) implements Serializable {
+    String nickname) {
 
   public static ArticleCommentResponse of(Long id, String content, LocalDateTime createdAt, String email,
       String nickname) {
