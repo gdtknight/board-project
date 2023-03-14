@@ -24,11 +24,12 @@ import org.springframework.data.domain.Pageable;
 
 import io.github.gdtknight.domain.Article;
 import io.github.gdtknight.domain.UserAccount;
-import io.github.gdtknight.domain.type.SearchType;
+import io.github.gdtknight.domain.constant.SearchType;
 import io.github.gdtknight.dto.ArticleDto;
 import io.github.gdtknight.dto.ArticleWithCommentsDto;
 import io.github.gdtknight.dto.UserAccountDto;
 import io.github.gdtknight.repository.ArticleRepository;
+import io.github.gdtknight.repository.UserAccountRepository;
 
 @DisplayName("비즈니스 로직 - 게시글")
 @ExtendWith(MockitoExtension.class)
@@ -38,6 +39,9 @@ public class ArticleServiceTest {
 
   @Mock
   private ArticleRepository articleRepository;
+
+  @Mock
+  private UserAccountRepository userAccountRepository;
 
   @DisplayName("검색어 없이 게시글을 검색하면, 게시글 페이지를 반환한다.")
   @Test
@@ -101,19 +105,40 @@ public class ArticleServiceTest {
     then(articleRepository).should().findByHashtag(hashtag, pageable);
   }
 
-  @DisplayName("해시태그를 조회하면, 유니크 해시태그 리스트를 반환한다.")
+  @DisplayName("게시글 ID로 조회하면, 댓글 달긴 게시글을 반환한다.")
   @Test
-  void givenNothing_whenCalling_thenReturnsHashtags() {
+  void givenArticleId_whenSearchingArticleWithComments_thenReturnsArticleWithComments() {
     // Given
-    List<String> expectedHashtags = List.of("#java", "#spring", "#boot");
-    given(articleRepository.findAllDistinctHashtags()).willReturn(expectedHashtags);
+    Long articleId = 1L;
+    Article article = createArticle();
+    given(articleRepository.findById(articleId)).willReturn(Optional.of(article));
 
     // When
-    List<String> actualHashtags = articleService.getHashtags();
+    ArticleWithCommentsDto dto = articleService.getArticleWithComments(articleId);
 
     // Then
-    assertThat(actualHashtags).isEqualTo(expectedHashtags);
-    then(articleRepository).should().findAllDistinctHashtags();
+    assertThat(dto)
+        .hasFieldOrPropertyWithValue("title", article.getTitle())
+        .hasFieldOrPropertyWithValue("content", article.getContent())
+        .hasFieldOrPropertyWithValue("hashtag", article.getHashtag());
+    then(articleRepository).should().findById(articleId);
+  }
+
+  @DisplayName("댓글 달린 게시글이 없으면, 예외를 던진다.")
+  @Test
+  void givenNonexistentArticleId_whenSearchingArticleWithComments_thenThrowsException() {
+    // Given
+    Long articleId = 0L;
+    given(articleRepository.findById(articleId)).willReturn(Optional.empty());
+
+    // When
+    Throwable t = catchThrowable(() -> articleService.getArticleWithComments(articleId));
+
+    // Then
+    assertThat(t)
+        .isInstanceOf(EntityNotFoundException.class)
+        .hasMessage("게시글이 없습니다 - articleId: " + articleId);
+    then(articleRepository).should().findById(articleId);
   }
 
   @DisplayName("게시글을 조회하면, 게시글을 반환한다.")
@@ -125,7 +150,7 @@ public class ArticleServiceTest {
     given(articleRepository.findById(articleId)).willReturn(Optional.of(article));
 
     // when
-    ArticleWithCommentsDto dto = articleService.getArticle(articleId);
+    ArticleDto dto = articleService.getArticle(articleId);
 
     // then
     assertThat(dto)
@@ -135,7 +160,7 @@ public class ArticleServiceTest {
     then(articleRepository).should().findById(articleId);
   }
 
-  @DisplayName("없는 게시글을 조회하면, 예외를 던진다.")
+  @DisplayName("게시글이 없으면, 예외를 던진다.")
   @Test
   void givenNoneexistentArticleId_whenSearchingArticle_thenThrowsException() {
     // given
@@ -158,12 +183,14 @@ public class ArticleServiceTest {
   void givenArticleInfo_whenSavingArticle_thenSaveArticle() {
     // given
     ArticleDto dto = createArticleDto();
+    given(userAccountRepository.getReferenceById(dto.userAccountDto().userId())).willReturn(createUserAccount());
     given(articleRepository.save(any(Article.class))).willReturn(createArticle());
 
     // when
     articleService.saveArticle(dto);
 
     // then
+    then(userAccountRepository).should().getReferenceById(dto.userAccountDto().userId());
     then(articleRepository).should().save(any(Article.class));
   }
 
@@ -176,7 +203,7 @@ public class ArticleServiceTest {
     given(articleRepository.getReferenceById(dto.id())).willReturn(article);
 
     // when
-    articleService.updateArticle(dto);
+    articleService.updateArticle(dto.id(), dto);
 
     // then
     assertThat(article)
@@ -194,7 +221,7 @@ public class ArticleServiceTest {
     given(articleRepository.getReferenceById(dto.id())).willThrow(EntityNotFoundException.class);
 
     // when
-    articleService.updateArticle(dto);
+    articleService.updateArticle(dto.id(), dto);
 
     // then
     then(articleRepository).should().getReferenceById(dto.id());
@@ -212,6 +239,34 @@ public class ArticleServiceTest {
 
     // then
     then(articleRepository).should().deleteById(articleId);
+  }
+
+  @DisplayName("게시글 수를 조회하면, 게시글 수를 반환한다")
+  @Test
+  void givenNothing_whenCountingArticles_thenReturnsArticleCount() {
+    // Given
+    long expected = 0L;
+    given(articleRepository.count()).willReturn(expected);
+    // When
+    long actual = articleService.getArticleCount();
+    // Then
+    assertThat(actual).isEqualTo(expected);
+    then(articleRepository).should().count();
+  }
+
+  @DisplayName("해시태그를 조회하면, 유니크 해시태그 리스트를 반환한다.")
+  @Test
+  void givenNothing_whenCalling_thenReturnsHashtags() {
+    // Given
+    List<String> expectedHashtags = List.of("#java", "#spring", "#boot");
+    given(articleRepository.findAllDistinctHashtags()).willReturn(expectedHashtags);
+
+    // When
+    List<String> actualHashtags = articleService.getHashtags();
+
+    // Then
+    assertThat(actualHashtags).isEqualTo(expectedHashtags);
+    then(articleRepository).should().findAllDistinctHashtags();
   }
 
   private UserAccount createUserAccount() {
