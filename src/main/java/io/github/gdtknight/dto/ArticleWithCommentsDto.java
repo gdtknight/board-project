@@ -36,7 +36,7 @@ public record ArticleWithCommentsDto(
         modifiedAt, modifiedBy);
   }
 
-  public static ArticleWithCommentsDto from(Article entity) {
+  public static ArticleWithCommentsDto fromEntity(Article entity) {
     return new ArticleWithCommentsDto(
         entity.getId(),
         UserAccountDto.fromEntity(entity.getUserAccount()),
