@@ -1,4 +1,4 @@
-package io.github.gdtknight.domain.type;
+package io.github.gdtknight.domain.constant;
 
 import lombok.Getter;
 
