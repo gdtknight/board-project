@@ -3,6 +3,7 @@ package io.github.gdtknight.dto;
 import java.time.LocalDateTime;
 
 import io.github.gdtknight.domain.Article;
+import io.github.gdtknight.domain.UserAccount;
 
 public record ArticleDto(
     Long id,
@@ -24,6 +25,17 @@ public record ArticleDto(
     return new ArticleDto(id, userAccountDto, title, content, hashtag, createdAt, createdBy, modifiedAt, modifiedBy);
   }
 
+  public static ArticleDto of(
+      UserAccountDto userAccountDto,
+      String title, String content, String hashtag) {
+    return new ArticleDto(
+        null,
+        userAccountDto,
+        title, content, hashtag,
+        null, null,
+        null, null);
+  }
+
   public static ArticleDto fromEntity(Article entity) {
     return new ArticleDto(
         entity.getId(),
@@ -37,9 +49,9 @@ public record ArticleDto(
         entity.getModifiedBy());
   }
 
-  public Article toEntity() {
+  public Article toEntity(UserAccount userAccount) {
     return Article.of(
-        userAccountDto.toEntity(),
+        userAccount,
         title,
         content,
         hashtag);
