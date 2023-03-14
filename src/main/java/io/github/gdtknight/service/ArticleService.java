@@ -10,10 +10,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import io.github.gdtknight.domain.Article;
-import io.github.gdtknight.domain.type.SearchType;
+import io.github.gdtknight.domain.UserAccount;
+import io.github.gdtknight.domain.constant.SearchType;
 import io.github.gdtknight.dto.ArticleDto;
 import io.github.gdtknight.dto.ArticleWithCommentsDto;
 import io.github.gdtknight.repository.ArticleRepository;
+import io.github.gdtknight.repository.UserAccountRepository;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -23,6 +26,7 @@ import lombok.extern.slf4j.Slf4j;
 @Transactional
 public class ArticleService {
 
+  private final UserAccountRepository userAccountRepository;
   private final ArticleRepository articleRepository;
 
   @Transactional(readOnly = true)
@@ -52,20 +56,28 @@ public class ArticleService {
   }
 
   @Transactional(readOnly = true)
-  public ArticleWithCommentsDto getArticle(Long articleId) {
+  public ArticleWithCommentsDto getArticleWithComments(Long articleId) {
     return articleRepository.findById(articleId)
-        .map(ArticleWithCommentsDto::from)
+        .map(ArticleWithCommentsDto::fromEntity)
         .orElseThrow(() -> new EntityNotFoundException("게시글이 없습니다 - articleId: " + articleId)); // 운영 편의
   }
 
-  public void saveArticle(ArticleDto dto) {
-    articleRepository.save(dto.toEntity());
+  @Transactional(readOnly = true)
+  public ArticleDto getArticle(Long articleId) {
+    return articleRepository.findById(articleId)
+        .map(ArticleDto::fromEntity)
+        .orElseThrow(() -> new EntityNotFoundException("게시글이 없습니다 - articleId: " + articleId));
   }
 
-  public void updateArticle(ArticleDto dto) {
+  public void saveArticle(ArticleDto dto) {
+    UserAccount userAccount = userAccountRepository.getReferenceById(dto.userAccountDto().userId());
+    articleRepository.save(dto.toEntity(userAccount));
+  }
+
+  public void updateArticle(Long articleId, ArticleDto dto) {
 
     try {
-      Article article = articleRepository.getReferenceById(dto.id());
+      Article article = articleRepository.getReferenceById(articleId);
 
       if (dto.title() != null) {
         article.setTitle(dto.title());
