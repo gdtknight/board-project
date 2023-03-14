@@ -22,10 +22,10 @@ import io.github.gdtknight.domain.Article;
 import io.github.gdtknight.domain.ArticleComment;
 import io.github.gdtknight.domain.UserAccount;
 import io.github.gdtknight.dto.ArticleCommentDto;
-import io.github.gdtknight.dto.ArticleCommentUpdateDto;
 import io.github.gdtknight.dto.UserAccountDto;
 import io.github.gdtknight.repository.ArticleCommentRepository;
 import io.github.gdtknight.repository.ArticleRepository;
+import io.github.gdtknight.repository.UserAccountRepository;
 
 @DisplayName("비즈니스 로직 - 댓글")
 @ExtendWith(MockitoExtension.class)
@@ -38,6 +38,9 @@ public class ArticleCommentServiceTest {
 
   @Mock
   private ArticleRepository articleRepository;
+
+  @Mock
+  private UserAccountRepository userAccountRepository;
 
   @DisplayName("게시글 ID로 조회하면, 해당하는 댓글 리스트를 반환한다.")
   @Test
@@ -61,6 +64,7 @@ public class ArticleCommentServiceTest {
     // given
     ArticleCommentDto dto = createArticleCommentDto("댓글");
     given(articleRepository.getReferenceById(dto.articleId())).willReturn(createArticle());
+    given(userAccountRepository.getReferenceById(dto.userAccountDto().userId())).willReturn(createUserAccount());
     given(articleCommentRepository.save(any(ArticleComment.class))).willReturn(null);
 
     // when
@@ -68,6 +72,7 @@ public class ArticleCommentServiceTest {
 
     // then
     then(articleRepository).should().getReferenceById(dto.articleId());
+    then(userAccountRepository).should().getReferenceById(dto.userAccountDto().userId());
     then(articleCommentRepository).should().save(any(ArticleComment.class));
   }
 
@@ -83,6 +88,7 @@ public class ArticleCommentServiceTest {
 
     // then
     then(articleRepository).should().getReferenceById(dto.articleId());
+    then(userAccountRepository).shouldHaveNoInteractions();
     then(articleCommentRepository).shouldHaveNoInteractions();
   }
 
