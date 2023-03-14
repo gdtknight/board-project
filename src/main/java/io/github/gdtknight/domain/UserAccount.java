@@ -1,10 +1,10 @@
 package io.github.gdtknight.domain;
 
+import java.util.Objects;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Index;
 import javax.persistence.Table;
@@ -21,7 +21,6 @@ import lombok.ToString;
 @Getter
 @ToString
 @Table(indexes = {
-    @Index(columnList = "userId", unique = true),
     @Index(columnList = "email", unique = true),
     @Index(columnList = "createdAt"),
     @Index(columnList = "createdBy")
@@ -30,11 +29,7 @@ import lombok.ToString;
 @Entity
 public class UserAccount extends AuditingFields {
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
-
-  @Setter
-  @Column(nullable = false, length = 50)
+  @Column(length = 50)
   private String userId;
   @Setter
   @Column(nullable = false)
@@ -61,4 +56,19 @@ public class UserAccount extends AuditingFields {
     return new UserAccount(
         userId, userPassword, email, nickname, memo);
   }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o)
+      return true;
+    if (!(o instanceof UserAccount userAccount))
+      return false;
+    return userId != null && userId.equals(userAccount.userId);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(userId);
+  }
+
 }

@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 import io.github.gdtknight.domain.UserAccount;
 
 public record UserAccountDto(
-    Long id,
     String userId,
     String userPassword,
     String email,
@@ -17,14 +16,12 @@ public record UserAccountDto(
     String modifiedBy) {
 
   public static UserAccountDto of(
-      Long id,
       String userId, String userPassword,
       String email, String nickname, String memo,
       LocalDateTime createdAt, String createdBy,
       LocalDateTime modifiedAt, String modifiedBy) {
 
     return new UserAccountDto(
-        id,
         userId, userPassword,
         email, nickname, memo,
         createdAt, createdBy,
@@ -33,7 +30,6 @@ public record UserAccountDto(
 
   public static UserAccountDto fromEntity(UserAccount entity) {
     return new UserAccountDto(
-        entity.getId(),
         entity.getUserId(),
         entity.getUserPassword(),
         entity.getEmail(),

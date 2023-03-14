@@ -101,11 +101,12 @@ public class ArticleCommentServiceTest {
 
     // then
     assertThat(articleComment.getContent())
-      .isNotEqualTo(oldContent)
-      .isEqualTo(updatedContent);
+        .isNotEqualTo(oldContent)
+        .isEqualTo(updatedContent);
 
     then(articleCommentRepository).should().getReferenceById(dto.id());
   }
+
   @DisplayName("없는 댓글 정보를 수정하려고 하면, 경고 로그를 찍고 아무것도 안한다.")
   @Test
   void givenNoneexistentArticle_whenUpdatingArticleComment_thenLogsWarningAndDoesNothing() {
@@ -148,7 +149,6 @@ public class ArticleCommentServiceTest {
 
   private UserAccountDto createUserAccountDto() {
     return UserAccountDto.of(
-        1L,
         "uno",
         "password",
         "uno@gmail.com",

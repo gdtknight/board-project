@@ -12,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Index;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
@@ -43,6 +44,7 @@ public class Article extends AuditingFields {
 
   @Setter
   @ManyToOne(optional = false)
+  @JoinColumn(name = "userId")
   private UserAccount userAccount;
 
   // @Setter 를 Class 전체가 아닌 각 필드에 걸어준다

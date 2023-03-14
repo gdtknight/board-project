@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Index;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -33,6 +34,7 @@ public class ArticleComment extends AuditingFields {
 
   @Setter
   @ManyToOne(optional = false)
+  @JoinColumn(name = "userId")
   private UserAccount userAccount;
 
   @ManyToOne(optional = false) // cascade 는 기본적으로 none
