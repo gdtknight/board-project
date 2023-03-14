@@ -100,6 +100,10 @@ public class ArticleService {
     articleRepository.deleteById(articleId);
   }
 
+  public long getArticleCount() {
+    return articleRepository.count();
+  }
+
   @Transactional(readOnly = true)
   public Page<ArticleDto> searchArticlesViaHashtag(String hashtag, Pageable pageable) {
     if (hashtag == null || hashtag.isBlank()) {
@@ -111,10 +115,6 @@ public class ArticleService {
 
   public List<String> getHashtags() {
     return articleRepository.findAllDistinctHashtags();
-  }
-
-  public Object getArticleCount() {
-    return null;
   }
 
 }
