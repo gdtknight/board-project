@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import io.github.gdtknight.domain.Article;
 import io.github.gdtknight.domain.ArticleComment;
+import io.github.gdtknight.domain.UserAccount;
 
 public record ArticleCommentDto(
     Long id,
@@ -14,6 +15,22 @@ public record ArticleCommentDto(
     String createdBy,
     LocalDateTime modifiedAt,
     String modifiedBy) {
+
+  public static ArticleCommentDto of(
+      Long articleId,
+      UserAccountDto userAccountDto,
+      String content) {
+
+    return new ArticleCommentDto(
+        null,
+        articleId,
+        userAccountDto,
+        content,
+        null,
+        null,
+        null,
+        null);
+  }
 
   public static ArticleCommentDto of(
       Long id,
@@ -48,10 +65,10 @@ public record ArticleCommentDto(
         entity.getModifiedBy());
   }
 
-  public ArticleComment toEntity(Article entity) {
+  public ArticleComment toEntity(Article article, UserAccount userAccount) {
     return ArticleComment.of(
-        entity,
-        userAccountDto.toEntity(),
+        article,
+        userAccount,
         content);
   }
 }
