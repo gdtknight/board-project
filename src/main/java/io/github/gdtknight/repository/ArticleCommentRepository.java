@@ -35,5 +35,5 @@ public interface ArticleCommentRepository extends
   }
 
   List<ArticleComment> findByArticle_Id(Long articleId);
-
+  void deleteByIdAndUserAccount_UserId(Long articleId, String userId);
 }
