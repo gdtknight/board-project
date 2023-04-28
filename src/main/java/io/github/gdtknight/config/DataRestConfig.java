@@ -11,7 +11,7 @@ public class DataRestConfig {
 
   @Bean
   public RepositoryRestConfigurer repositoryRestConfigurer() {
-    return RepositoryRestConfigurer.withConfig((config, cors) -> config.exposeIdsFor(UserAccount.class));
+    return RepositoryRestConfigurer.withConfig(
+        (config, cors) -> config.exposeIdsFor(UserAccount.class));
   }
-
 }

@@ -19,29 +19,28 @@ public class SecurityConfig {
 
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-    return http.authorizeHttpRequests(auth -> auth
-                    .requestMatchers(PathRequest.toStaticResources().atCommonLocations())
+    return http.authorizeHttpRequests(
+            auth ->
+                auth.requestMatchers(PathRequest.toStaticResources().atCommonLocations())
                     .permitAll()
-                    .mvcMatchers(
-                            HttpMethod.GET,
-                            "/",
-                            "/articles",
-                            "/articles/search-hashtag"
-                    ).permitAll()
+                    .mvcMatchers(HttpMethod.GET, "/", "/articles", "/articles/search-hashtag")
+                    .permitAll()
                     .anyRequest()
-                    .authenticated()
-            )
-            .formLogin().and()
-            .build();
+                    .authenticated())
+        .formLogin()
+        .and()
+        .build();
   }
 
   @Bean
   public UserDetailsService userDetailsService(UserAccountRepository userAccountRepository) {
-    return username -> userAccountRepository
+    return username ->
+        userAccountRepository
             .findById(username)
             .map(UserAccountDto::fromEntity)
             .map(BoardPrincipal::fromDto)
-            .orElseThrow(()-> new UsernameNotFoundException("유저를 찾을 수 없습니다 - username: " + username));
+            .orElseThrow(
+                () -> new UsernameNotFoundException("유저를 찾을 수 없습니다 - username: " + username));
   }
 
   @Bean

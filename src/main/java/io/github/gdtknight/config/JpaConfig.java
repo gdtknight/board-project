@@ -2,7 +2,6 @@ package io.github.gdtknight.config;
 
 import java.util.Optional;
 
-
 import io.github.gdtknight.security.BoardPrincipal;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,12 +17,12 @@ public class JpaConfig {
   @Bean
   public AuditorAware<String> auditorAware() {
     // @CreatedBy @LastModifiedBy 어노테이션 필드 기본값
-    return () -> Optional.ofNullable(SecurityContextHolder.getContext())
+    return () ->
+        Optional.ofNullable(SecurityContextHolder.getContext())
             .map(SecurityContext::getAuthentication)
             .filter(Authentication::isAuthenticated)
             .map(Authentication::getPrincipal)
             .map(BoardPrincipal.class::cast)
             .map(BoardPrincipal::getUsername);
   }
-
 }

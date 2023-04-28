@@ -16,11 +16,11 @@ import io.github.gdtknight.domain.QArticle;
 import io.github.gdtknight.repository.querydsl.ArticleRepositoryCustom;
 
 @RepositoryRestResource
-public interface ArticleRepository extends
-    JpaRepository<Article, Long>,
-    ArticleRepositoryCustom,
-    QuerydslPredicateExecutor<Article>, // 모든 필드에 대한 기본 검색 기능 구현
-    QuerydslBinderCustomizer<QArticle> {
+public interface ArticleRepository
+    extends JpaRepository<Article, Long>,
+        ArticleRepositoryCustom,
+        QuerydslPredicateExecutor<Article>, // 모든 필드에 대한 기본 검색 기능 구현
+        QuerydslBinderCustomizer<QArticle> {
 
   Page<Article> findByTitleContaining(String title, Pageable pageable);
 
@@ -46,7 +46,5 @@ public interface ArticleRepository extends
     bindings.bind(root.hashtag).first(StringExpression::containsIgnoreCase); // like '%S{value}%'
     bindings.bind(root.createdAt).first(DateTimeExpression::eq); // like '%S{value}%'
     bindings.bind(root.createdBy).first(StringExpression::containsIgnoreCase); // like '%S{value}%'
-
   }
-
 }
