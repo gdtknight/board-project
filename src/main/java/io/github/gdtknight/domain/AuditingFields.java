@@ -21,9 +21,7 @@ import lombok.ToString;
 @EntityListeners(AuditingEntityListener.class)
 @MappedSuperclass
 public class AuditingFields {
-
   // meta-information
-
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   @CreatedDate
   @Column(nullable = false, updatable = false)

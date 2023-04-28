@@ -10,10 +10,6 @@ public record ArticleCommentRequest(Long articleId, String content) {
   }
 
   public ArticleCommentDto toDto(UserAccountDto userAccountDto) {
-    return ArticleCommentDto.of(
-        articleId,
-        userAccountDto,
-        content);
+    return ArticleCommentDto.of(articleId, userAccountDto, content);
   }
-
 }

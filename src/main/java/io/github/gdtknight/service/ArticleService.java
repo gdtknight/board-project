@@ -30,41 +30,49 @@ public class ArticleService {
   private final ArticleRepository articleRepository;
 
   @Transactional(readOnly = true)
-  public Page<ArticleDto> searchArticles(SearchType searchType, String searchKeyword, Pageable pageable) {
+  public Page<ArticleDto> searchArticles(
+      SearchType searchType, String searchKeyword, Pageable pageable) {
 
     if (searchKeyword == null || searchKeyword.isBlank()) {
       return articleRepository.findAll(pageable).map(ArticleDto::fromEntity);
     }
 
     return switch (searchType) {
-      case TITLE ->
-        articleRepository.findByTitleContaining(searchKeyword, pageable).map(ArticleDto::fromEntity);
+      case TITLE -> articleRepository
+          .findByTitleContaining(searchKeyword, pageable)
+          .map(ArticleDto::fromEntity);
 
-      case CONTENT ->
-        articleRepository.findByContentContaining(searchKeyword, pageable).map(ArticleDto::fromEntity);
+      case CONTENT -> articleRepository
+          .findByContentContaining(searchKeyword, pageable)
+          .map(ArticleDto::fromEntity);
 
-      case ID ->
-        articleRepository.findByUserAccount_UserIdContaining(searchKeyword, pageable).map(ArticleDto::fromEntity);
+      case ID -> articleRepository
+          .findByUserAccount_UserIdContaining(searchKeyword, pageable)
+          .map(ArticleDto::fromEntity);
 
-      case NICKNAME ->
-        articleRepository.findByUserAccount_NicknameContaining(searchKeyword, pageable).map(ArticleDto::fromEntity);
+      case NICKNAME -> articleRepository
+          .findByUserAccount_NicknameContaining(searchKeyword, pageable)
+          .map(ArticleDto::fromEntity);
 
-      case HASHTAG ->
-        articleRepository.findByHashtag("#" + searchKeyword, pageable).map(ArticleDto::fromEntity);
+      case HASHTAG -> articleRepository
+          .findByHashtag("#" + searchKeyword, pageable)
+          .map(ArticleDto::fromEntity);
     };
-
   }
 
   @Transactional(readOnly = true)
   public ArticleWithCommentsDto getArticleWithComments(Long articleId) {
-    return articleRepository.findById(articleId)
+    return articleRepository
+        .findById(articleId)
         .map(ArticleWithCommentsDto::fromEntity)
-        .orElseThrow(() -> new EntityNotFoundException("게시글이 없습니다 - articleId: " + articleId)); // 운영 편의
+        .orElseThrow(
+            () -> new EntityNotFoundException("게시글이 없습니다 - articleId: " + articleId)); // 운영 편의
   }
 
   @Transactional(readOnly = true)
   public ArticleDto getArticle(Long articleId) {
-    return articleRepository.findById(articleId)
+    return articleRepository
+        .findById(articleId)
         .map(ArticleDto::fromEntity)
         .orElseThrow(() -> new EntityNotFoundException("게시글이 없습니다 - articleId: " + articleId));
   }
@@ -75,29 +83,31 @@ public class ArticleService {
   }
 
   public void updateArticle(Long articleId, ArticleDto dto) {
-
     try {
       Article article = articleRepository.getReferenceById(articleId);
+      UserAccount userAccount =
+          userAccountRepository.getReferenceById(dto.userAccountDto().userId());
 
-      if (dto.title() != null) {
-        article.setTitle(dto.title());
+      if (article.getUserAccount().equals(userAccount)) {
+        if (dto.title() != null) {
+          article.setTitle(dto.title());
+        }
+        if (dto.content() != null) {
+          article.setContent(dto.content());
+        }
+        article.setHashtag(dto.hashtag());
       }
-
-      if (dto.content() != null) {
-        article.setContent(dto.content());
-      }
-
-      article.setHashtag(dto.hashtag());
 
       articleRepository.save(article);
     } catch (EntityNotFoundException e) {
-      log.warn("게시글 업데이트 실패. 게시글을 찾을 수 없습니다 - dto: {}", dto); // String interpolation
+      log.warn(
+          "게시글 업데이트 실패. 게시글을 수정하는데 필요한 정보를 찾을 수 없습니다 - {}",
+          e.getLocalizedMessage()); // String interpolation
     }
-
   }
 
-  public void deleteArticle(long articleId) {
-    articleRepository.deleteById(articleId);
+  public void deleteArticle(long articleId, String userId) {
+    articleRepository.deleteByIdAndUserAccount_UserId(articleId, userId);
   }
 
   public long getArticleCount() {
@@ -116,5 +126,4 @@ public class ArticleService {
   public List<String> getHashtags() {
     return articleRepository.findAllDistinctHashtags();
   }
-
 }

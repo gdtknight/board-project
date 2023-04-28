@@ -21,11 +21,12 @@ import lombok.ToString;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @ToString(callSuper = true)
-@Table(indexes = {
-    @Index(columnList = "content"),
-    @Index(columnList = "createdAt"),
-    @Index(columnList = "createdBy")
-})
+@Table(
+    indexes = {
+      @Index(columnList = "content"),
+      @Index(columnList = "createdAt"),
+      @Index(columnList = "createdBy")
+    })
 @Entity
 public class ArticleComment extends AuditingFields {
   @Id
@@ -69,10 +70,8 @@ public class ArticleComment extends AuditingFields {
   // 서로 다른 두 row (entity)가 구별되기 위한 조건
   @Override
   public boolean equals(Object obj) {
-    if (this == obj)
-      return true;
-    if (!(obj instanceof ArticleComment articleComment))
-      return false;
+    if (this == obj) return true;
+    if (!(obj instanceof ArticleComment articleComment)) return false;
     // id가 부여되지 않았다면, 동등성 검사 자체가 의미없음
     return id != null && id.equals(articleComment.id);
   }

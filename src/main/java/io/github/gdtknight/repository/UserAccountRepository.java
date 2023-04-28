@@ -4,6 +4,4 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import io.github.gdtknight.domain.UserAccount;
 
-public interface UserAccountRepository extends JpaRepository<UserAccount, String> {
-
-}
+public interface UserAccountRepository extends JpaRepository<UserAccount, String> {}

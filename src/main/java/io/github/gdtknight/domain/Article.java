@@ -29,12 +29,13 @@ import lombok.ToString;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @ToString(callSuper = true)
-@Table(indexes = {
-    @Index(columnList = "title"),
-    @Index(columnList = "hashtag"),
-    @Index(columnList = "createdAt"),
-    @Index(columnList = "createdBy")
-})
+@Table(
+    indexes = {
+      @Index(columnList = "title"),
+      @Index(columnList = "hashtag"),
+      @Index(columnList = "createdAt"),
+      @Index(columnList = "createdBy")
+    })
 @EntityListeners(AuditingEntityListener.class)
 @Entity
 public class Article extends AuditingFields {
@@ -53,12 +54,12 @@ public class Article extends AuditingFields {
   @Setter
   @Column(nullable = false)
   private String title; // 제목
+
   @Setter
   @Column(nullable = false, length = 10000)
   private String content; // 본문
 
-  @Setter
-  private String hashtag; // 해시태그
+  @Setter private String hashtag; // 해시태그
 
   @ToString.Exclude // 순환 참조 문제 발생 가능성 제거
   @OrderBy("createdAt DESC")
@@ -92,10 +93,8 @@ public class Article extends AuditingFields {
   // 서로 다른 두 row (entity)가 구별되기 위한 조건
   @Override
   public boolean equals(Object obj) {
-    if (this == obj)
-      return true;
-    if (!(obj instanceof Article article))
-      return false;
+    if (this == obj) return true;
+    if (!(obj instanceof Article article)) return false;
     // id가 부여되지 않았다면, 동등성 검사 자체가 의미없음
     return id != null && id.equals(article.id);
   }

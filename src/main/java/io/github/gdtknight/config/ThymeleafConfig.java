@@ -26,9 +26,7 @@ public class ThymeleafConfig {
   @ConstructorBinding
   @Getter
   public static class Thymeleaf3Properties {
-    /**
-     * Use Thymeleaf 3 Decoupled Logic
-     */
+    /** Use Thymeleaf 3 Decoupled Logic */
     private final boolean decoupledLogic;
   }
 }

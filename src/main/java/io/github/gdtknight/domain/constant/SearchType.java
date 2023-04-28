@@ -9,11 +9,9 @@ public enum SearchType {
   NICKNAME("닉네임"),
   HASHTAG("해시태그");
 
-  @Getter
-  private final String description;
+  @Getter private final String description;
 
   private SearchType(String description) {
     this.description = description;
   }
-
 }

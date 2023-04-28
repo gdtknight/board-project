@@ -7,7 +7,8 @@ import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
 import io.github.gdtknight.domain.Article;
 import io.github.gdtknight.domain.QArticle;
 
-public class ArticleRepositoryCustomImpl extends QuerydslRepositorySupport implements ArticleRepositoryCustom {
+public class ArticleRepositoryCustomImpl extends QuerydslRepositorySupport
+    implements ArticleRepositoryCustom {
 
   public ArticleRepositoryCustomImpl() {
     super(Article.class);
@@ -20,7 +21,7 @@ public class ArticleRepositoryCustomImpl extends QuerydslRepositorySupport imple
     return from(article)
         .distinct()
         .select(article.hashtag)
-        .where(article.hashtag.isNotNull()).fetch();
+        .where(article.hashtag.isNotNull())
+        .fetch();
   }
-
 }
